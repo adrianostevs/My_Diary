@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Body_Roboto_14">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">@dimen/text_14</item>
+    </style>
+
+    <style name="RobotoBold" parent="android:Widget.TextView">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
+    </style>
+
+    <style name="RobotoBlackRegular" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <style name="RobotoGrayRegular" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/blue_grey_800_alpha_60</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <style name="RobotoBlueRegular" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/color_system_blue</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <style name="Button_Roboto_14">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
+        <item name="android:textSize">@dimen/text_14</item>
+    </style>
+
+    <style name="ButtonRounded" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/dimen_8</item>
+    </style>
+
+    <style name="ButtonPrimary" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:textAppearance">@style/Button_Roboto_14</item>
+        <item name="backgroundTint">@color/color_button</item>
+        <item name="shapeAppearance">@style/ButtonRounded</item>
+        <item name="android:insetTop">@dimen/dimen_0</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:insetBottom">@dimen/dimen_0</item>
+        <item name="android:insetRight">@dimen/dimen_0</item>
+        <item name="android:insetLeft">@dimen/dimen_0</item>
+        <item name="minHeight">@dimen/dimen_48</item>
+    </style>
+
+    <style name="ButtonSecondary" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:textAppearance">@style/Button_Roboto_14</item>
+        <item name="backgroundTint">@color/color_system_blue_transparent_10</item>
+        <item name="shapeAppearance">@style/ButtonRounded</item>
+        <item name="android:insetTop">@dimen/dimen_0</item>
+        <item name="android:textColor">@color/color_system_blue</item>
+        <item name="android:insetBottom">@dimen/dimen_0</item>
+        <item name="android:insetRight">@dimen/dimen_0</item>
+        <item name="android:insetLeft">@dimen/dimen_0</item>
+        <item name="minHeight">@dimen/dimen_48</item>
+    </style>
+
+</resources>

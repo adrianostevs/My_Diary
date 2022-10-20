@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">My Diary</string>
+    <string name="dont_have_account">Don\'t have an account?</string>
+    <string name="register_here">Click here to register.</string>
+    <string name="register">Register</string>
+    <string name="enter_your_name">Enter Your Name</string>
+    <string name="enter_your_email">Enter Your Email</string>
+    <string name="enter_your_password">Enter Your Password</string>
+    <string name="register_success">Yay! Your account has been created!</string>
+    <string name="please_login">Please login by clicking the button below</string>
+    <string name="login">Login</string>
+    <string name="please_wait">Please wait...</string>
+</resources>

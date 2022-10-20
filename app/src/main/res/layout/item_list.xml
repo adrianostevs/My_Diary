@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mcvContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_8"
+        android:layout_marginHorizontal="@dimen/dimen_16"
+        android:layout_marginBottom="@dimen/dimen_8"
+        app:cardCornerRadius="@dimen/dimen_12"
+        app:cardElevation="@dimen/dimen_8">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/llItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="@dimen/dimen_16">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/aivPicture"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:transitionName="picture"
+                tools:src="@drawable/bg_grey"
+                android:layout_marginBottom="@dimen/dimen_8"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/mtvTitle"
+                style="@style/RobotoBold"
+                tools:text="JUDUL"
+                android:textSize="@dimen/text_16"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginBottom="@dimen/dimen_8"
+                android:transitionName="name"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/mtvDescription"
+                style="@style/RobotoBlackRegular"
+                tools:text="Deskripsi di sini"
+                android:textSize="@dimen/text_14"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:transitionName="description"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>
