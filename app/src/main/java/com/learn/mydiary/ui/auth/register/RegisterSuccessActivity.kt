@@ -1,6 +1,5 @@
 package com.learn.mydiary.ui.auth.register
 
-import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
@@ -21,6 +20,7 @@ class RegisterSuccessActivity : BaseActivity<ActivityRegisterSuccessBinding>() {
         viewBinding.apply {
             mbLogin.setOnClickListener {
                 startActivity(Intent(this@RegisterSuccessActivity, LoginActivity::class.java))
+                finish()
             }
 
             lavRegister.setAnimation(R.raw.register)

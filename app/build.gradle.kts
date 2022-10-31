@@ -54,6 +54,8 @@ dependencies {
     implementation(Dependencies.AndroidX.constraintLayout)
     implementation(Dependencies.AndroidX.swipeRefreshLayout)
     implementation(Dependencies.AndroidX.coreKTX)
+    implementation(Dependencies.AndroidX.camera)
+    implementation(Dependencies.AndroidX.cameraLifecycle)
     implementation(Dependencies.AndroidX.cameraView)
     implementation(Dependencies.AndroidX.lifecycleViewModelKTX)
     implementation(Dependencies.AndroidX.lifecycleLiveDataKTX)

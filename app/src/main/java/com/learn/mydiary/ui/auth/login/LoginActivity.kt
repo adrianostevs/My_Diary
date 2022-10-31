@@ -2,18 +2,14 @@ package com.learn.mydiary.ui.auth.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.learn.mydiary.R
 import com.learn.mydiary.base.BaseActivity
 import com.learn.mydiary.data.remote.model.request.LoginRequest
-import com.learn.mydiary.data.remote.model.response.ResultResponse
 import com.learn.mydiary.databinding.ActivityLoginBinding
 import com.learn.mydiary.ui.auth.register.RegisterActivity
-import com.learn.mydiary.ui.auth.register.RegisterSuccessActivity
 import com.learn.mydiary.ui.dialog.AppDialog
 import com.learn.mydiary.ui.main.MainActivity
 import com.learn.mydiary.util.preferences.Preferences
@@ -24,21 +20,16 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class LoginActivity : BaseActivity<ActivityLoginBinding>() {
 
+    @Inject
+    lateinit var preferences: Preferences
+
     private val mViewModel: LoginViewModel by viewModels()
 
     private val mLoadingDialog by lazy { AppDialog(supportFragmentManager) }
 
-    @Inject
-    lateinit var preferences: Preferences
-
     override fun onViewBinding() = ActivityLoginBinding.inflate(layoutInflater)
 
     override fun onCreated(savedInstanceState: Bundle?) {
-        val token = preferences.getValue(Preferences.TOKEN)
-//        if (token!!.isNotEmpty()){
-//            startActivity(Intent())
-//            finish()
-//        }
 
         viewBinding.apply {
             lavLogin.setAnimation(R.raw.login)
@@ -82,8 +73,11 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
                         Toast.makeText(this@LoginActivity, it.message, Toast.LENGTH_SHORT).show()
                     }
                     is LoginEvent.LoginSuccess -> {
+                        preferences.setValue(Preferences.TOKEN, it.login?.loginResult?.token.toString())
+                        preferences.setValue(Preferences.NAME, it.login?.loginResult?.name.toString())
                         Toast.makeText(this@LoginActivity, it.login?.message, Toast.LENGTH_SHORT).show()
                         startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                        finishAffinity()
                     }
                 }
             }

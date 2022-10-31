@@ -2,7 +2,6 @@ package com.learn.mydiary.ui.main
 
 import androidx.paging.PagingData
 import com.learn.mydiary.data.remote.model.request.StoryRequest
-import com.learn.mydiary.data.remote.model.response.ListStoryResponse
 import com.learn.mydiary.domain.model.Story
 import kotlinx.coroutines.Job
 

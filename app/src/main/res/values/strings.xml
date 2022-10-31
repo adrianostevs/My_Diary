@@ -10,4 +10,9 @@
     <string name="please_login">Please login by clicking the button below</string>
     <string name="login">Login</string>
     <string name="please_wait">Please wait...</string>
+    <string name="error_occurred">Ooops.. Error Occurred</string>
+    <string name="add_description">Add description here</string>
+    <string name="add_story">Add Story</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
 </resources>

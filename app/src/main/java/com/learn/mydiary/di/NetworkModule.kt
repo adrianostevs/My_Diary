@@ -1,7 +1,5 @@
 package com.learn.mydiary.di
 
-import android.content.Context
-import com.google.gson.Gson
 import com.learn.mydiary.data.remote.network.ApiService
 import com.learn.mydiary.data.remote.network.HttpClientInterceptor
 import dagger.Module
