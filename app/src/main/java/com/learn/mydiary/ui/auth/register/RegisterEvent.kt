@@ -1,6 +1,5 @@
 package com.learn.mydiary.ui.auth.register
 
-import com.learn.mydiary.data.remote.model.request.LoginRequest
 import com.learn.mydiary.data.remote.model.request.RegisterRequest
 import com.learn.mydiary.data.remote.model.response.BaseResponse
 import kotlinx.coroutines.Job

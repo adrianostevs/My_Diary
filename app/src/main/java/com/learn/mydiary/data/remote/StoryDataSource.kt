@@ -1,12 +1,10 @@
 package com.learn.mydiary.data.remote
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.learn.mydiary.data.remote.model.request.StoryRequest
 import com.learn.mydiary.data.remote.network.ApiService
 import com.learn.mydiary.domain.model.Story
-import com.learn.mydiary.util.preferences.Preferences
 import javax.inject.Inject
 
 class StoryDataSource @Inject constructor(private val apiService: ApiService) :

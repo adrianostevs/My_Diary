@@ -5,8 +5,6 @@ import com.learn.mydiary.data.remote.model.request.LoginRequest
 import com.learn.mydiary.data.remote.model.request.RegisterRequest
 import com.learn.mydiary.data.remote.model.response.BaseResponse
 import com.learn.mydiary.data.remote.model.response.LoginResultResponse
-import com.learn.mydiary.domain.model.Base
-import com.learn.mydiary.domain.model.User
 import kotlinx.coroutines.flow.Flow
 
 interface IUserRepository {

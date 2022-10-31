@@ -1,19 +1,21 @@
 package com.learn.mydiary.ui.main
 
+import android.app.Activity
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.learn.mydiary.databinding.ItemListBinding
-import com.learn.mydiary.domain.entity.StoryEntity
 import com.learn.mydiary.domain.model.Story
+import com.learn.mydiary.ui.detail.DetailActivity
 
 class MainAdapter(
     diffUtil: DiffUtil.ItemCallback<Story>,
-    private val onItemSelected: (Story) -> Unit
 ) : PagingDataAdapter<Story, MainAdapter.MainViewHolder>(diffUtil) {
 
     inner class MainViewHolder(private val binding: ItemListBinding) :
@@ -23,7 +25,18 @@ class MainAdapter(
                 mtvTitle.text = data.name
                 mtvDescription.text = data.description
                 aivPicture.load(data.photoUrl)
-                mcvContainer.setOnClickListener { onItemSelected.invoke(data) }
+                mcvContainer.setOnClickListener {
+                    val intent = Intent(mcvContainer.context, DetailActivity::class.java)
+                    intent.putExtra(DetailActivity.INTENT_DATA, data)
+
+                    val optionsCompat: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        mcvContainer.context as Activity,
+                        Pair(mtvTitle, "name"),
+                        Pair(mtvDescription, "description"),
+                        Pair(aivPicture, "picture")
+                    )
+                    mcvContainer.context.startActivity(intent, optionsCompat.toBundle())
+                }
             }
         }
     }

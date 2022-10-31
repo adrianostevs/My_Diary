@@ -7,7 +7,6 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.learn.mydiary.base.BaseActivity
 import com.learn.mydiary.data.remote.model.request.RegisterRequest
-import com.learn.mydiary.data.remote.model.response.ResultResponse
 import com.learn.mydiary.databinding.ActivityRegisterBinding
 import com.learn.mydiary.ui.dialog.AppDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -60,6 +59,7 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>() {
                     is RegisterEvent.RegisterSuccess -> {
                         Toast.makeText(this@RegisterActivity, it.register?.message, Toast.LENGTH_SHORT).show()
                         startActivity(Intent(this@RegisterActivity, RegisterSuccessActivity::class.java))
+                        finishAffinity()
                     }
                 }
             }

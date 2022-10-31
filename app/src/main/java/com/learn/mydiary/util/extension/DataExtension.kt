@@ -2,11 +2,13 @@ package com.learn.mydiary.util.extension
 
 import com.google.gson.Gson
 import com.learn.mydiary.base.AppResult
-import com.learn.mydiary.data.remote.model.response.ResultResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import retrofit2.Response
 
 inline fun <T> AppResult<T>.onCompleteListener(

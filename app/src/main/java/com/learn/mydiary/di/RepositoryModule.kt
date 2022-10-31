@@ -1,8 +1,7 @@
 package com.learn.mydiary.di
 
-import com.learn.mydiary.data.repository.UserRepository
 import com.learn.mydiary.data.remote.network.ApiService
-import com.learn.mydiary.util.preferences.Preferences
+import com.learn.mydiary.data.repository.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,5 +14,5 @@ object RepositoryModule {
 
     @Provides
     @ViewModelScoped
-    fun provideUserRepository(apiService: ApiService, preferences: Preferences): UserRepository = UserRepository(apiService)
+    fun provideUserRepository(apiService: ApiService): UserRepository = UserRepository(apiService)
 }

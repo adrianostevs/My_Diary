@@ -12,7 +12,6 @@ import android.view.View
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
 import com.learn.mydiary.R
-import java.util.regex.Pattern
 
 class EditTextEmail : AppCompatEditText, View.OnTouchListener {
 
