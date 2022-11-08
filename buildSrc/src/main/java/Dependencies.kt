@@ -34,6 +34,8 @@ object Dependencies {
 
     object Common {
         const val gson = "com.google.code.gson:gson:${DependenciesVersion.Common.GSON}"
+        const val playServiceMaps =
+            "com.google.android.gms:play-services-maps:${DependenciesVersion.Common.PLAY_SERVICE_MAPS}"
     }
 
     object Network {
@@ -68,6 +70,10 @@ object Dependencies {
         const val junitTest = "androidx.test.ext:junit:${DependenciesVersion.Testing.JUNIT_TEST}"
         const val espressoTest =
             "androidx.test.espresso:espresso-core:${DependenciesVersion.Testing.ESPRESSO_CORE_TEST}"
+        const val mockitoCore = "org.mockito:mockito-core:${DependenciesVersion.Testing.MOCKITO}"
+        const val mockitoInline = "org.mockito:mockito-inline:${DependenciesVersion.Testing.MOCKITO}"
+        const val coroutineTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${DependenciesVersion.Coroutine.COROUTINES}"
+        const val arch = "androidx.arch.core:core-testing:${DependenciesVersion.Testing.ARCH}"
     }
 
 }

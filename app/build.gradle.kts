@@ -5,6 +5,7 @@ plugins {
     id("kotlin-parcelize")
     id("kotlin-android")
     id("dagger.hilt.android.plugin")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -67,6 +68,7 @@ dependencies {
     implementation(Dependencies.UI.shimmer)
     implementation(Dependencies.UI.lottie)
     implementation(Dependencies.Common.gson)
+    implementation(Dependencies.Common.playServiceMaps)
     implementation(Dependencies.Network.retrofit)
     implementation(Dependencies.Network.retrofitConverterGson)
     implementation(Dependencies.Network.okhttp)
@@ -75,8 +77,15 @@ dependencies {
     implementation(Dependencies.Coroutine.core)
     implementation(Dependencies.Coroutine.android)
     implementation(Dependencies.Dagger.hilt)
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
+    implementation("androidx.appcompat:appcompat:1.5.1")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     kapt(Dependencies.Dagger.hiltCompiler)
     testImplementation(Dependencies.Testing.junit)
+    testImplementation(Dependencies.Testing.mockitoInline)
+    testImplementation(Dependencies.Testing.mockitoCore)
+    testImplementation(Dependencies.Testing.arch)
+    testImplementation(Dependencies.Testing.coroutineTest)
     androidTestImplementation(Dependencies.Testing.junitTest)
     androidTestImplementation(Dependencies.Testing.espressoTest)
 }

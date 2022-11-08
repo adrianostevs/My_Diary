@@ -7,6 +7,7 @@ import com.learn.mydiary.base.AppResult
 import com.learn.mydiary.data.remote.StoryDataSource
 import com.learn.mydiary.data.remote.model.request.StoryRequest
 import com.learn.mydiary.data.remote.model.response.BaseResponse
+import com.learn.mydiary.data.remote.model.response.ListStoryResponse
 import com.learn.mydiary.data.remote.network.ApiService
 import com.learn.mydiary.domain.model.Story
 import com.learn.mydiary.domain.repository.IStoryRepository
@@ -28,9 +29,20 @@ class StoryRepository @Inject constructor(private val apiService: ApiService) :
             )
         }
 
-    override suspend fun setStory(requestBody: RequestBody): AppResult<Flow<BaseResponse?>> = connection {
-        apiService.setStories(requestBody).valueAsFlow()
-    }
+    override suspend fun setStory(requestBody: RequestBody): AppResult<Flow<BaseResponse?>> =
+        connection {
+            apiService.setStories(requestBody).valueAsFlow()
+        }
+
+    override suspend fun getLocation(storyRequest: StoryRequest): AppResult<Flow<ListStoryResponse?>> =
+        connection {
+            apiService.getStories(storyRequest).valueAsFlow()
+        }
+
+    override suspend fun getAllStoryTest(storyRequest: StoryRequest): AppResult<Flow<ListStoryResponse?>> =
+        connection {
+            apiService.getStories(storyRequest).valueAsFlow()
+        }
 
 
 }

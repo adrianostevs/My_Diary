@@ -1,0 +1,15 @@
+Pengujian ViewModel
+1. Pengujian LoginViewModel -> Memastikan jika login success akan mengembalikan respon success
+2. Pengujian RegisterViewModel -> Memastikan jika register success akan mengembalikan respon success
+3. Pengujian MainViewModel -> Memastikan jika get story success akan mengembalikan respon success
+4. Pengujian AddStoryViewModel -> Memastikan jika set story success akan mengembalikan respon success
+5. Pengujian MapsViewModel -> Memastikan jika get maps success akan mengembalikan respon success
+
+Pengujian Repository
+1. Pengujian UserRepository -> Terdapat 2 function yaitu untuk register dan login
+    -. Login : Memastikan bahwa login success dan data tidak null serta hasil expected sesuai dengan hasil tes
+    -. Register : Memastikan bahwa register success dan data tidak null serta hasil expected sesuai dengan hasil tes
+2. Pengujian StoryRepository -> Terdapat 3 function yaitu untuk get story, get maps, dan set story
+    -. Get story : Memastikan bahwa get story success dan data tidak null serta hasil expected sesuai dengan hasil tes
+    -. Get maps : Memastikan bahwa get maps success dan data tidak null serta hasil expected sesuai dengan hasil tes
+    -. Set story : Memastikan bahwa set story success dan data tidak null serta hasil expected sesuai dengan hasil tes

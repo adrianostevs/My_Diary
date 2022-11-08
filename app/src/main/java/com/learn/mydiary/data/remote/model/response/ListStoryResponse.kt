@@ -1,9 +1,7 @@
 package com.learn.mydiary.data.remote.model.response
 
-import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
 
 data class ListStoryResponse(
     @Expose
@@ -35,9 +33,9 @@ data class ListStory(
     val createdAt: String?,
     @Expose
     @SerializedName("lat")
-    val lat: Float? = null,
+    val lat: Double? = null,
     @Expose
     @SerializedName("lon")
-    val lon: Float? = null
+    val lon: Double? = null
 )
 

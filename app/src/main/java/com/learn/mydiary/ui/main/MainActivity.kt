@@ -13,6 +13,7 @@ import com.learn.mydiary.databinding.ActivityMainBinding
 import com.learn.mydiary.domain.model.Story
 import com.learn.mydiary.ui.addstory.AddStoryActivity
 import com.learn.mydiary.ui.auth.login.LoginActivity
+import com.learn.mydiary.ui.maps.MapsActivity
 import com.learn.mydiary.util.adapter.LoadAdapter
 import com.learn.mydiary.util.preferences.Preferences
 import dagger.hilt.android.AndroidEntryPoint
@@ -69,6 +70,10 @@ class MainActivity: BaseActivity<ActivityMainBinding>() {
 
             fabAdd.setOnClickListener {
                 startActivity(Intent(this@MainActivity, AddStoryActivity::class.java))
+            }
+
+            fabMaps.setOnClickListener {
+                startActivity(Intent(this@MainActivity, MapsActivity::class.java))
             }
         }
 
