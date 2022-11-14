@@ -1,24 +1,23 @@
 package com.learn.mydiary.login
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.learn.mydiary.base.AppResult
+import androidx.lifecycle.MutableLiveData
+import com.learn.mydiary.data.DummyData
 import com.learn.mydiary.data.remote.model.request.LoginRequest
 import com.learn.mydiary.data.remote.model.response.LoginResultResponse
+import com.learn.mydiary.data.remote.model.response.ResultResponse
 import com.learn.mydiary.data.repository.UserRepository
 import com.learn.mydiary.ui.auth.login.LoginViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import com.learn.mydiary.util.getOrAwaitValue
+import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.test.*
 import org.junit.*
 import org.junit.runner.RunWith
 import org.mockito.Mock
+import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
 
-@ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class LoginViewModelTest {
 
@@ -28,42 +27,25 @@ class LoginViewModelTest {
     @Mock
     private lateinit var userRepository: UserRepository
     private lateinit var loginViewModel: LoginViewModel
-
-    val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
+    private val dummyResponse = DummyData.dummyLoginResponse()
 
     @Before
     fun setUp() {
         loginViewModel = LoginViewModel(userRepository)
     }
 
-    @Before
-    fun setUpDispatcher(){
-        Dispatchers.setMain(testDispatcher)
-    }
-
-    @After
-    fun tearDownDispatcher(){
-        Dispatchers.resetMain()
-    }
-
     @Test
-    fun `when login success and Result Success`() = runTest {
-        val request = LoginRequest(email = "stevenadriano84@gmail.com", password = "dipay123")
-        val expected = AppResult.OnSuccess<Flow<LoginResultResponse?>>(flow {
-            emit(
-                LoginResultResponse(
-                    error = false,
-                    message = "OK",
-                    LoginResultResponse.LoginResult(
-                        userId = "user-GnfHKnXLPfnnQ_PL",
-                        name = "Steven",
-                        token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c2VyLUduZkhLblhMUGZublFfUEwiLCJpYXQiOjE2Njc2NzAyMDZ9.h-wRZ01z3zQEUXdJhrh7hXJhd9wFjmbwGI34zRRdnkQ"
-                    )
-                )
-            )
-        }.flowOn(Dispatchers.IO))
-        `when`(userRepository.login(request)).thenReturn(expected)
-        Assert.assertTrue(userRepository.login(request) is AppResult.OnSuccess)
+    fun `when login() is success and ResultResponse is Success`() {
+        val request = LoginRequest(email = "brokoli@mail.com", password = "sayur123")
+        val expectedResponse = MutableLiveData<ResultResponse<LoginResultResponse>>()
+        expectedResponse.value = ResultResponse.Success(dummyResponse)
+        `when`(loginViewModel.login(request)).thenReturn(expectedResponse)
 
+        val actualResponse = loginViewModel.login(request).getOrAwaitValue()
+
+        Mockito.verify(userRepository).login(request)
+        Assert.assertNotNull(actualResponse)
+        Assert.assertTrue(actualResponse is ResultResponse.Success)
+        assertEquals(dummyResponse, (actualResponse as ResultResponse.Success).data)
     }
 }

@@ -1,17 +1,19 @@
 package com.learn.mydiary.repository.story
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.learn.mydiary.data.remote.model.request.StoryRequest
+import androidx.paging.AsyncPagingDataDiffer
+import androidx.paging.ExperimentalPagingApi
+import androidx.recyclerview.widget.ListUpdateCallback
+import com.learn.mydiary.data.DummyData
 import com.learn.mydiary.data.remote.network.ApiService
 import com.learn.mydiary.data.repository.StoryRepository
-import com.learn.mydiary.repository.user.ApiServiceTest
-import com.learn.mydiary.util.extension.flowAsData
-import com.learn.mydiary.util.extension.onCompleteListener
+import com.learn.mydiary.repository.ApiServiceTest
+import com.learn.mydiary.ui.main.MainAdapter
+import com.learn.mydiary.util.MainCoroutineRules
+import com.learn.mydiary.util.PagedDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -20,106 +22,77 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.junit.MockitoJUnitRunner
-import java.io.File
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class StoryRepositoryTest {
-
     @get:Rule
-    val instantExecutorRule = InstantTaskExecutorRule()
+    var instantExecutorRule = InstantTaskExecutorRule()
 
     @Mock
-    private lateinit var apiService: ApiService
     private lateinit var storyRepository: StoryRepository
+    private lateinit var apiService: ApiService
+
+    @Mock
+    private var dummyMultipart = DummyData.dummyMultipart()
+    private var dummyDescription = DummyData.dummyDescription()
 
     @Before
     fun setUp() {
         apiService = ApiServiceTest()
-        storyRepository = StoryRepository(apiService)
     }
 
     @Test
-    fun `when list stories success and Response Success`() = runTest {
-        val request = StoryRequest(page = 1)
-        val actual = storyRepository.getAllStoryTest(request)
+    fun `when get story map is success`() = runTest {
+        val expectedStory = DummyData.dummyListMap()
+        val actualStory = apiService.getStories(1, 30, 1)
+        Assert.assertNotNull(actualStory)
+        Assert.assertEquals(expectedStory.listStory.size, actualStory.listStory.size)
+    }
 
-        actual.onCompleteListener(
-            onSuccess = {
-                val listStory = it?.flowAsData()
-
-                Assert.assertNotNull(listStory)
-                Assert.assertEquals(
-                    listStory, ApiServiceTest.dummyStory
-                )
-            },
-            onFailure = { _, _ ->
-
-            },
-            onError = {
-
-            }
+    @Test
+    fun `when set story is success`() = runTest {
+        val expectedResponse = DummyData.dummyBaseResponse()
+        val actualResponse = apiService.setStories(
+            dummyDescription,
+            dummyMultipart
         )
+        Assert.assertNotNull(actualResponse)
+        Assert.assertEquals(expectedResponse, actualResponse)
     }
 
+    @OptIn(ExperimentalPagingApi::class)
     @Test
-    fun `when get map stories success and Response Success`() = runTest {
-        val request = StoryRequest(location = 1)
-        val actual = storyRepository.getLocation(request)
+    fun `when get story is success`() = runTest {
+        val mainCoroutineRule = MainCoroutineRules()
 
-        actual.onCompleteListener(
-            onSuccess = {
-                val listStory = it?.flowAsData()
+        val dummyStories = DummyData.dummyListStory()
+        val data = PagedDataSource.snapshot(dummyStories)
 
-                Assert.assertNotNull(listStory)
-                Assert.assertEquals(
-                    listStory, ApiServiceTest.dummyStory
-                )
-            },
-            onFailure = { _, _ ->
+        val expectedResult = flowOf(data)
+        Mockito.`when`(storyRepository.getAllStories()).thenReturn(expectedResult)
 
-            },
-            onError = {
-
-            }
-        )
-    }
-
-    @Test
-    fun `when set stories success and Response Success`() = runTest {
-        val file = Mockito.mock(File::class.java)
-
-        val part = MultipartBody.Builder()
-        part.setType(MultipartBody.FORM)
-
-        if (file != null)
-            part.addFormDataPart(
-                "photo",
-                "addStoryRequest.jpeg",
-                file.asRequestBody("image/*".toMediaTypeOrNull())
+        storyRepository.getAllStories().collect {
+            val differ = AsyncPagingDataDiffer(
+                MainAdapter.DIFF_CALLBACK,
+                listUpdateCallback,
+                mainCoroutineRule.dispatcher,
+                mainCoroutineRule.dispatcher
             )
-        part.addFormDataPart(
-            "description",
-            "broh"
-        )
 
-        val request = part.build()
-        val actual = storyRepository.setStory(request)
+            differ.submitData(it)
+            Assert.assertNotNull(differ.snapshot())
+            Assert.assertEquals(
+                DummyData.generateDummyStoriesResponse().listStory.size,
+                differ.snapshot().size
+            )
+        }
+    }
 
-        actual.onCompleteListener(
-            onSuccess = {
-                val listStory = it?.flowAsData()
-                Assert.assertNotNull(listStory)
-                Assert.assertEquals(
-                    listStory, ApiServiceTest.dummySetStory
-                )
-            },
-            onFailure = { _, _ ->
-
-            },
-            onError = {
-
-            }
-        )
+    private val listUpdateCallback = object : ListUpdateCallback {
+        override fun onInserted(position: Int, count: Int) {}
+        override fun onRemoved(position: Int, count: Int) {}
+        override fun onMoved(fromPosition: Int, toPosition: Int) {}
+        override fun onChanged(position: Int, count: Int, payload: Any?) {}
     }
 }

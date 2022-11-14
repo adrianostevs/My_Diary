@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -18,10 +17,9 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.learn.mydiary.R
 import com.learn.mydiary.base.BaseActivity
-import com.learn.mydiary.data.remote.model.request.StoryRequest
+import com.learn.mydiary.data.remote.model.response.ResultResponse
 import com.learn.mydiary.databinding.ActivityMapsBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import java.io.IOException
 import java.util.*
 
@@ -41,39 +39,32 @@ class MapsActivity : BaseActivity <ActivityMapsBinding>(), OnMapReadyCallback{
             .findFragmentById(R.id.maps) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        mViewModel.getAllLocation(StoryRequest(location = 1, storySize = 30))
-        observeData()
-
-    }
-
-    private fun observeData() {
-        lifecycleScope.launchWhenStarted {
-            mViewModel.mapsEvent.collectLatest {
-                when (it) {
-                    is MapsEvent.GetLocationLoading -> {}
-                    is MapsEvent.GetLocationFailed -> {
-                        Toast.makeText(this@MapsActivity,it.message, Toast.LENGTH_SHORT).show()
+        mViewModel.getAllLocation().observe(this@MapsActivity){
+            when (it) {
+                is ResultResponse.Loading -> {}
+                is ResultResponse.Failure -> {
+                    Toast.makeText(this@MapsActivity,it.errorMessage, Toast.LENGTH_SHORT).show()
+                }
+                is ResultResponse.Success -> {
+                    it.data.listStory.forEach{ data ->
+                        val latLng = LatLng(data.lat!!, data.lon!!)
+                        val name = getName(data.lat, data.lon)
+                        map.addMarker(MarkerOptions().position(latLng).title(data.description). snippet(name))
+                        boundsBuilder.include(latLng)
                     }
-                    is MapsEvent.GetLocationSuccess -> {
-                        it.data?.listStory?.forEach{ data ->
-                            val latLng = LatLng(data.lat!!, data.lon!!)
-                            val name = getName(data.lat, data.lon)
-                            map.addMarker(MarkerOptions().position(latLng).title(data.description). snippet(name))
-                            boundsBuilder.include(latLng)
-                        }
-                        val bounds: LatLngBounds = boundsBuilder.build()
-                        map.animateCamera(
-                            CameraUpdateFactory.newLatLngBounds(
-                                bounds,
-                                resources.displayMetrics.widthPixels,
-                                resources.displayMetrics.heightPixels,
-                                300
-                            )
+                    val bounds: LatLngBounds = boundsBuilder.build()
+                    map.animateCamera(
+                        CameraUpdateFactory.newLatLngBounds(
+                            bounds,
+                            resources.displayMetrics.widthPixels,
+                            resources.displayMetrics.heightPixels,
+                            300
                         )
-                    }
+                    )
                 }
             }
         }
+
     }
 
     private fun getName(lat: Double, lon: Double): String? {
@@ -98,7 +89,6 @@ class MapsActivity : BaseActivity <ActivityMapsBinding>(), OnMapReadyCallback{
         map.uiSettings.isCompassEnabled = true
         map.uiSettings.isMapToolbarEnabled = true
 
-        observeData()
         getMyLocation()
     }
 

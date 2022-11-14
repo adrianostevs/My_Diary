@@ -4,13 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.learn.mydiary.base.BaseActivity
 import com.learn.mydiary.data.remote.model.request.RegisterRequest
+import com.learn.mydiary.data.remote.model.response.ResultResponse
 import com.learn.mydiary.databinding.ActivityRegisterBinding
 import com.learn.mydiary.ui.dialog.AppDialog
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
 class RegisterActivity : BaseActivity<ActivityRegisterBinding>() {
@@ -32,37 +31,30 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>() {
                             email = etEmail.text.toString().trim(),
                             password = etPassword.text.toString().trim()
                         )
-                    )
+                    ).observe(this@RegisterActivity){
+                        when (it) {
+                            is ResultResponse.Success -> {
+                                Toast.makeText(this@RegisterActivity, it.data.message, Toast.LENGTH_SHORT).show()
+                                startActivity(Intent(this@RegisterActivity, RegisterSuccessActivity::class.java))
+                                finishAffinity()
+                            }
+                            is ResultResponse.Failure -> {
+                                Toast.makeText(this@RegisterActivity, it.errorMessage, Toast.LENGTH_SHORT).show()
+                            }
+                            is ResultResponse.Loading -> {
+                                if (it.isLoading) {
+                                    mLoadingDialog.show(this@RegisterActivity::class.java.simpleName)
+                                } else {
+                                    mLoadingDialog.dismiss()
+                                }
+                            }
+                        }
+                    }
                 }
             } else {
                 mbRegister.isEnabled = false
             }
 
-        }
-        observeData()
-    }
-
-    private fun observeData() {
-        lifecycleScope.launchWhenCreated {
-            mViewModel.registerEvent.collectLatest {
-                when (it) {
-                    is RegisterEvent.RegisterFailed -> {
-                        Toast.makeText(this@RegisterActivity, it.message, Toast.LENGTH_SHORT).show()
-                    }
-                    is RegisterEvent.RegisterLoading -> {
-                        if (it.isLoading) {
-                            mLoadingDialog.show(this@RegisterActivity::class.java.simpleName)
-                        } else {
-                            mLoadingDialog.dismiss()
-                        }
-                    }
-                    is RegisterEvent.RegisterSuccess -> {
-                        Toast.makeText(this@RegisterActivity, it.register?.message, Toast.LENGTH_SHORT).show()
-                        startActivity(Intent(this@RegisterActivity, RegisterSuccessActivity::class.java))
-                        finishAffinity()
-                    }
-                }
-            }
         }
     }
 }

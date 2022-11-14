@@ -1,28 +1,16 @@
-package com.learn.mydiary.repository.user
+package com.learn.mydiary.repository
 
 import com.learn.mydiary.data.remote.model.request.LoginRequest
 import com.learn.mydiary.data.remote.model.request.RegisterRequest
-import com.learn.mydiary.data.remote.model.request.StoryRequest
 import com.learn.mydiary.data.remote.model.response.BaseResponse
 import com.learn.mydiary.data.remote.model.response.ListStory
 import com.learn.mydiary.data.remote.model.response.ListStoryResponse
 import com.learn.mydiary.data.remote.model.response.LoginResultResponse
 import com.learn.mydiary.data.remote.network.ApiService
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import retrofit2.Response
 
-class ApiServiceTest : ApiService {
-    override suspend fun register(registerRequest: RegisterRequest): Response<BaseResponse> =
-        Response.success(dummyRegister)
-
-    override suspend fun login(loginRequest: LoginRequest): Response<LoginResultResponse> =
-        Response.success(dummyLogin)
-
-    override suspend fun getStories(storyRequest: StoryRequest): Response<ListStoryResponse> =
-        Response.success(dummyStory)
-
-    override suspend fun setStories(requestBody: RequestBody): Response<BaseResponse> =
-        Response.success(dummySetStory)
+class ApiServiceTest: ApiService {
 
     companion object {
 
@@ -70,5 +58,24 @@ class ApiServiceTest : ApiService {
             error = false,
             message = "success"
         )
+    }
+
+    override suspend fun register(registerRequest: RegisterRequest): BaseResponse {
+        return dummyRegister
+    }
+
+    override suspend fun login(loginRequest: LoginRequest): LoginResultResponse {
+        return dummyLogin
+    }
+
+    override suspend fun getStories(page: Int, size: Int, location: Int?): ListStoryResponse {
+        return dummyStory
+    }
+
+    override suspend fun setStories(
+        description: RequestBody,
+        file: MultipartBody.Part
+    ): BaseResponse {
+        return dummyRegister
     }
 }

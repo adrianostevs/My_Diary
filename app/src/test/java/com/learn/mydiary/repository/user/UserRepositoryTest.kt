@@ -1,12 +1,11 @@
 package com.learn.mydiary.repository.user
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.learn.mydiary.data.DummyData
 import com.learn.mydiary.data.remote.model.request.LoginRequest
 import com.learn.mydiary.data.remote.model.request.RegisterRequest
 import com.learn.mydiary.data.remote.network.ApiService
-import com.learn.mydiary.data.repository.UserRepository
-import com.learn.mydiary.util.extension.flowAsData
-import com.learn.mydiary.util.extension.onCompleteListener
+import com.learn.mydiary.repository.ApiServiceTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
@@ -26,51 +25,26 @@ class UserRepositoryTest {
 
     @Mock
     private lateinit var apiService: ApiService
-    private lateinit var userRepository: UserRepository
 
     @Before
     fun setUp() {
         apiService = ApiServiceTest()
-        userRepository = UserRepository(apiService)
     }
 
     @Test
-    fun `when login success and not null`() = runTest {
-        val request = LoginRequest(email = "stevenadriano84@gmail.com", password = "dipay123")
-        val actual = userRepository.login(request)
-
-        actual.onCompleteListener(
-            onSuccess = {
-                val login = it?.flowAsData()
-
-                Assert.assertNotNull(login)
-                Assert.assertEquals(
-                    login,
-                    ApiServiceTest.dummyLogin
-                )
-            },
-            onFailure = {_, _ ->},
-            onError = {}
-        )
+    fun `when register is success`() = runTest {
+        val expectedResponse = DummyData.dummyBaseResponse()
+        val actualResponse =
+            apiService.register(RegisterRequest("brokoli", "brokoli@mail.com", "cpktnwt456"))
+        Assert.assertNotNull(actualResponse)
+        Assert.assertEquals(expectedResponse, actualResponse)
     }
 
     @Test
-    fun `when register success and not null`() = runTest {
-        val request = RegisterRequest(name = "Steven", email = "stevenadriano84@gmail.com", password = "dipay123")
-        val actual = userRepository.register(request)
-
-        actual.onCompleteListener(
-            onSuccess = {
-                val register = it?.flowAsData()
-
-                Assert.assertNotNull(register)
-                Assert.assertEquals(
-                    register,
-                    ApiServiceTest.dummyRegister
-                )
-            },
-            onError = {},
-            onFailure = {_,_ ->}
-        )
+    fun `when login is success`() = runTest {
+        val expectedResponse = DummyData.dummyLoginResponse()
+        val actualResponse = apiService.login(LoginRequest("brokoli@gmail.com", "cpktnwt456"))
+        Assert.assertNotNull(actualResponse)
+        Assert.assertEquals(expectedResponse, actualResponse)
     }
 }

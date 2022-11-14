@@ -5,6 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.paging.LoadState
+import androidx.paging.LoadStateAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.learn.mydiary.base.AppLoadingState
 import com.learn.mydiary.base.AppRecyclerViewHolder
 import com.learn.mydiary.databinding.AdapterLoadingBinding

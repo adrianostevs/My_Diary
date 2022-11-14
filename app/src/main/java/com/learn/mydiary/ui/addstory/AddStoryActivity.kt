@@ -7,14 +7,14 @@ import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import com.learn.mydiary.base.BaseActivity
-import com.learn.mydiary.data.remote.model.request.AddStoryRequest
+import com.learn.mydiary.data.remote.model.response.ResultResponse
 import com.learn.mydiary.databinding.ActivityAddStoryBinding
 import com.learn.mydiary.ui.addstory.camera.CameraActivity
 import com.learn.mydiary.ui.dialog.AppDialog
@@ -23,7 +23,11 @@ import com.learn.mydiary.util.camera.reduceFileImage
 import com.learn.mydiary.util.camera.rotateBitmap
 import com.learn.mydiary.util.camera.uriToFile
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
 @AndroidEntryPoint
@@ -60,55 +64,66 @@ class AddStoryActivity : BaseActivity<ActivityAddStoryBinding>() {
             }
 
         }
-
-        observeData()
     }
 
     override fun onResume() {
         viewBinding.apply {
-            if (getFile == null || etDescription.text == null) {
-                mbAddStory.isEnabled = false
-            } else {
+            if (getFile != null || etDescription.text != null) {
+
                 mbAddStory.isEnabled = true
                 mbAddStory.setOnClickListener {
-                    mViewModel.setStory(
-                        AddStoryRequest(
-                            photo = getFile,
-                            description = etDescription.text.toString().trim()
+                    val description = viewBinding.etDescription.text.toString()
+                        .toRequestBody("application/json;charset=utf-8".toMediaType())
+                    val image = getFile?.asRequestBody("image/*".toMediaTypeOrNull())?.let {
+                        MultipartBody.Part.createFormData(
+                            "photo",
+                            getFile?.name,
+                            it
                         )
-                    )
-                }
-            }
-        }
-        super.onResume()
-    }
-
-    private fun observeData() {
-        lifecycleScope.launchWhenCreated {
-            mViewModel.storyEvent.collectLatest {
-                when (it) {
-                    is AddStoryEvent.AddStorySuccess -> {
-                        Toast.makeText(
-                            this@AddStoryActivity,
-                            it.response?.message,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        startActivity(Intent(this@AddStoryActivity, MainActivity::class.java))
-                        finishAffinity()
                     }
-                    is AddStoryEvent.AddStoryFailed -> {
-                        Toast.makeText(this@AddStoryActivity, it.message, Toast.LENGTH_SHORT).show()
-                    }
-                    is AddStoryEvent.AddStoryLoading -> {
-                        if (it.isLoading) {
-                            mLoadingDialog.show(this@AddStoryActivity::class.java.simpleName)
-                        } else {
-                            mLoadingDialog.dismiss()
+                    Log.d("FFFF", "${viewBinding.etDescription.text}")
+                    mViewModel.setStory(
+                        description = description,
+                        image = image!!
+                    ).observe(this@AddStoryActivity) {
+                        when (it) {
+                            is ResultResponse.Loading -> {
+                                if (it.isLoading) {
+                                    mLoadingDialog.show(this@AddStoryActivity::class.java.simpleName)
+                                } else {
+                                    mLoadingDialog.dismiss()
+                                }
+                            }
+                            is ResultResponse.Failure -> {
+                                Toast.makeText(
+                                    this@AddStoryActivity,
+                                    it.errorMessage,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                Log.d("FFFFFF", it.errorMessage)
+                            }
+                            is ResultResponse.Success -> {
+                                Toast.makeText(
+                                    this@AddStoryActivity,
+                                    it.data.message,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                startActivity(
+                                    Intent(
+                                        this@AddStoryActivity,
+                                        MainActivity::class.java
+                                    )
+                                )
+                                finishAffinity()
+                            }
                         }
                     }
                 }
+            } else {
+                mbAddStory.isEnabled = false
             }
         }
+        super.onResume()
     }
 
     override fun onRequestPermissionsResult(

@@ -80,6 +80,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-maps:18.1.0")
     implementation("androidx.appcompat:appcompat:1.5.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.test.espresso:espresso-idling-resource:3.4.0")
     kapt(Dependencies.Dagger.hiltCompiler)
     testImplementation(Dependencies.Testing.junit)
     testImplementation(Dependencies.Testing.mockitoInline)
