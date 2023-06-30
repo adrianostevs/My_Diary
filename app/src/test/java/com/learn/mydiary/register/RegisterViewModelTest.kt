@@ -9,6 +9,7 @@ import com.learn.mydiary.data.remote.model.response.ResultResponse
 import com.learn.mydiary.data.repository.UserRepository
 import com.learn.mydiary.ui.auth.register.RegisterViewModel
 import com.learn.mydiary.util.getOrAwaitValue
+import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.test.*
 import org.junit.*
 import org.junit.runner.RunWith
@@ -44,7 +45,7 @@ class RegisterViewModelTest {
         Mockito.verify(userRepository).register(request)
         Assert.assertNotNull(actualResponse)
         Assert.assertTrue(actualResponse is ResultResponse.Success)
-        junit.framework.Assert.assertEquals(
+        assertEquals(
             dummyResponse,
             (actualResponse as ResultResponse.Success).data
         )

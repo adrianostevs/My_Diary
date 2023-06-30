@@ -1,5 +1,6 @@
 package com.learn.mydiary.util.extension
 
+import androidx.paging.PagingData
 import com.google.gson.Gson
 import com.learn.mydiary.base.AppResult
 import kotlinx.coroutines.CoroutineScope
@@ -9,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.runBlocking
 import retrofit2.Response
 
 inline fun <T> AppResult<T>.onCompleteListener(

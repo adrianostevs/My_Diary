@@ -9,6 +9,7 @@ import androidx.paging.cachedIn
 import com.learn.mydiary.data.repository.StoryRepository
 import com.learn.mydiary.domain.model.Story
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.filterNotNull
 import javax.inject.Inject
 
 @HiltViewModel
