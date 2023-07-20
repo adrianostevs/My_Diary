@@ -1,5 +1,6 @@
 package com.learn.mydiary.di
 
+import com.learn.mydiary.BuildConfig
 import com.learn.mydiary.data.remote.network.ApiService
 import com.learn.mydiary.data.remote.network.HttpClientInterceptor
 import dagger.Module
@@ -16,12 +17,15 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-
     @Singleton
     @Provides
     fun provideClient(httpClientInterceptor: HttpClientInterceptor): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
+            level = if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor.Level.BODY
+            } else {
+                HttpLoggingInterceptor.Level.NONE
+            }
         })
         .addInterceptor(httpClientInterceptor)
         .connectTimeout(15, TimeUnit.SECONDS)

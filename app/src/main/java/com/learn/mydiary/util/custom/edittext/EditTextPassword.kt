@@ -45,7 +45,7 @@ class EditTextPassword : AppCompatEditText, View.OnTouchListener {
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 if (s.toString().isNotEmpty()) showClearButton() else hideClearButton()
-                if (s.toString().length > 5) hideError() else showError()
+                if (s.toString().length >= 8) hideError() else showError()
             }
 
             override fun afterTextChanged(s: Editable?) {

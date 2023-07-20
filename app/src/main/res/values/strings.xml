@@ -1,18 +1,19 @@
 <resources>
-    <string name="app_name">My Diary</string>
-    <string name="dont_have_account">Don\'t have an account?</string>
-    <string name="register_here">Click here to register.</string>
-    <string name="register">Register</string>
-    <string name="enter_your_name">Enter Your Name</string>
-    <string name="enter_your_email">Enter Your Email</string>
-    <string name="enter_your_password">Enter Your Password</string>
-    <string name="register_success">Yay! Your account has been created!</string>
-    <string name="please_login">Please login by clicking the button below</string>
-    <string name="login">Login</string>
-    <string name="please_wait">Please wait...</string>
-    <string name="error_occurred">Ooops.. Error Occurred</string>
-    <string name="add_description">Add description here</string>
+    <string name="app_name" translatable="false">My Diary</string>
+    <string name="dont_have_account" translatable="false">Don\'t have an account?</string>
+    <string name="register_here" translatable="false">Click here to register.</string>
+    <string name="register" translatable="false">Register</string>
+    <string name="enter_your_name" translatable="false">Enter Your Name</string>
+    <string name="enter_your_email" translatable="false">Enter Your Email</string>
+    <string name="enter_your_password" translatable="false">Enter Your Password</string>
+    <string name="register_success" translatable="false">Yay! Your account has been created!</string>
+    <string name="please_login" translatable="false">Please login by clicking the button below</string>
+    <string name="login" translatable="false">Login</string>
+    <string name="please_wait" translatable="false">Please wait...</string>
+    <string name="error_occurred" translatable="false">Ooops.. Error Occurred</string>
+    <string name="add_description" translatable="false">Add description here</string>
     <string name="add_story">Add Story</string>
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>

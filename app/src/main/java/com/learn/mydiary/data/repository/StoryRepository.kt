@@ -1,36 +1,70 @@
 package com.learn.mydiary.data.repository
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import com.learn.mydiary.base.AppResult
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.liveData
+import androidx.paging.*
 import com.learn.mydiary.data.remote.StoryDataSource
-import com.learn.mydiary.data.remote.model.request.StoryRequest
 import com.learn.mydiary.data.remote.model.response.BaseResponse
+import com.learn.mydiary.data.remote.model.response.ListStoryResponse
+import com.learn.mydiary.data.remote.model.response.ResultResponse
 import com.learn.mydiary.data.remote.network.ApiService
 import com.learn.mydiary.domain.model.Story
-import com.learn.mydiary.domain.repository.IStoryRepository
-import com.learn.mydiary.util.extension.connection
-import com.learn.mydiary.util.extension.valueAsFlow
+import com.learn.mydiary.util.wrapIdlingResource
 import kotlinx.coroutines.flow.Flow
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import javax.inject.Inject
 
-class StoryRepository @Inject constructor(private val apiService: ApiService) :
-    IStoryRepository {
+class StoryRepository @Inject constructor(private val apiService: ApiService) {
 
-    override suspend fun getAllStory(storyRequest: StoryRequest): AppResult<Flow<PagingData<Story>>> =
-        connection {
-            AppResult.OnSuccess(
-                Pager(PagingConfig(pageSize = storyRequest.size)) {
-                    StoryDataSource(apiService).apply { setRequest(storyRequest) }
-                }.flow
-            )
+    fun getAllStories(): Flow<PagingData<Story>> {
+
+        wrapIdlingResource {
+            return Pager(
+                config = PagingConfig(
+                    pageSize = 15
+                ),
+                pagingSourceFactory = { StoryDataSource(apiService) },
+            ).flow
         }
-
-    override suspend fun setStory(requestBody: RequestBody): AppResult<Flow<BaseResponse?>> = connection {
-        apiService.setStories(requestBody).valueAsFlow()
     }
 
+    fun setStory(
+        description: RequestBody,
+        image: MultipartBody.Part
+    ): LiveData<ResultResponse<BaseResponse>> = liveData {
+        emit(ResultResponse.Loading(isLoading = true))
+        try {
+            val response = apiService.setStories(description, image)
+            if (!response.error) {
+                emit(ResultResponse.Success(response))
+                emit(ResultResponse.Loading(isLoading = false))
+            } else {
+                emit(ResultResponse.Loading(isLoading = false))
+                emit(ResultResponse.Failure(response.message))
+            }
+        } catch (e: Exception) {
+            emit(ResultResponse.Failure(e.message.toString()))
+            emit(ResultResponse.Loading(isLoading = false))
+        }
+    }
+
+    fun getLocation(): LiveData<ResultResponse<ListStoryResponse>> =
+        liveData {
+            emit(ResultResponse.Loading(isLoading = true))
+            try {
+                val response = apiService.getStories(1, 30, 1)
+                if (!response.error!!) {
+                    emit(ResultResponse.Success(response))
+                    emit(ResultResponse.Loading(isLoading = false))
+                } else {
+                    emit(ResultResponse.Loading(isLoading = false))
+                    emit(ResultResponse.Failure(response.message!!))
+                }
+            } catch (e: Exception) {
+                emit(ResultResponse.Failure(e.message.toString()))
+                emit(ResultResponse.Loading(isLoading = false))
+            }
+        }
 
 }

@@ -26,6 +26,7 @@ object DependenciesVersion {
 
     object Common {
         const val GSON = "2.9.1"
+        const val PLAY_SERVICE_MAPS = "18.1.0"
     }
 
     object Network {
@@ -49,5 +50,7 @@ object DependenciesVersion {
         const val JUNIT = "4.13.2"
         const val JUNIT_TEST = "1.1.3"
         const val ESPRESSO_CORE_TEST = "3.4.0"
+        const val MOCKITO = "4.4.0"
+        const val ARCH = "2.1.0"
     }
 }
